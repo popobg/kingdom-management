@@ -5,8 +5,8 @@ import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
 /**
- * Classe CRUD de gestion de la collection "Citoyens"
- * issue dune base de données MongoDB
+ * Classe de gestion de la collection "Citoyens"
+ * issue d'une base de données MongoDB
  */
 public class GestionCitoyens {
     /** Ensemble d'objets d'une collection "Citoyens" MongoDB */

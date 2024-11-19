@@ -5,7 +5,7 @@ import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
 /**
- * Classe CRUD de gestion de la collection "Ressources"
+ * Classe de gestion de la collection "Ressources"
  * issue d'une base de données MongoDB
  */
 public class GestionRessources {

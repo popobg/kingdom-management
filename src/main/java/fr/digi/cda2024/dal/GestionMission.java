@@ -5,9 +5,16 @@ import org.bson.Document;
 
 import java.util.Random;
 
+/**
+ * Classe de gestion de la collection "Missions"
+ * issue d'une base de données MongoDB
+ */
 public class GestionMission {
+    /** Ensemble de documents d'une collection "Missions" MongoDB */
     private MongoCollection<Document> missions;
+    /** Gestionnaire de la collection "Citoyens" */
     private GestionCitoyens gestionCitoyens;
+    /** Gestionnaire de la collection "Ressources" */
     private GestionRessources gestionRessources;
 
     /**

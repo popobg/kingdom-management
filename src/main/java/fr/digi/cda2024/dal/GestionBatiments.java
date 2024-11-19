@@ -3,8 +3,14 @@ package fr.digi.cda2024.dal;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
+/**
+ * Classe de gestion de la collection "Batiments"
+ * issue d'une base de données MongoDB
+ */
 public class GestionBatiments {
+    /** Ensemble d'objets d'une collection "Batiments" MongoDB */
     private MongoCollection<Document> batiments;
+    /** Gestionnaire de la collection "Ressources" */
     private GestionRessources ressources;
 
     /**
