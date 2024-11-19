@@ -14,10 +14,10 @@ public class GestionRessources {
 
     /**
      * Constructeur
-     * @param ressource collection Ressources MongoDB
+     * @param ressources collection Ressources MongoDB
      */
-    public GestionRessources(MongoCollection<Document> ressource) {
-        this.ressources = ressource;
+    public GestionRessources(MongoCollection<Document> ressources) {
+        this.ressources = ressources;
     }
 
     /**
@@ -58,7 +58,7 @@ public class GestionRessources {
     // UPDATE du CRUD
     public void mettreAJourRessource(String type, int nouvelleQuantite) {
         ressources.updateOne(new Document("type", type), new Document("$set", new Document("quantite", nouvelleQuantite)));
-        System.out.println("Quantité mise à jour pour : " + type);
+        System.out.println("Quantité mise à jour pour : " + type + " -> " + nouvelleQuantite);
     }
 
     /**
@@ -72,20 +72,32 @@ public class GestionRessources {
     }
 
     /**
-     * Vérifie si le stock de la ressource est suffisant par rapport au besoin.
+     * Vérifier si le stock de la ressource est suffisant par rapport au besoin.
      * @param type type de ressource
      * @param quantiteNecessaire quantité nécessaire
-     * @return
+     * @return boolean, true si stock suffisant, sinon false
      */
     public boolean verifierRessource(String type, int quantiteNecessaire) {
         // On récupère le document le plus récent
         Document ressource = ressources.find(new Document("type", type))
                 .sort(Sorts.descending("_id"))
                 .first();
+
         if (ressource != null) {
             int quantiteDisponible = ressource.getInteger("quantite", 0);
+            System.out.println("Quantité disponible de " + type + " : " + quantiteDisponible);
+            System.out.println("Quantité nécessaire de " + type + " : " + quantiteNecessaire);
             return quantiteDisponible >= quantiteNecessaire;
         }
         return false;
+    }
+
+    /**
+     * Retourne la ressource de type demandée
+     * @param type type de ressource
+     * @return Document ressource
+     */
+    public Document getRessource(String type) {
+        return ressources.find(new Document("type", type)).first();
     }
 }

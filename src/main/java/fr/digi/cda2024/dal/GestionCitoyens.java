@@ -1,6 +1,7 @@
 package fr.digi.cda2024.dal;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 
 /**
@@ -59,7 +60,7 @@ public class GestionCitoyens {
     // UPDATE du CRUD
     // Ici on incrémente avec la nouvelle quantité (ancienne + nouvelle)
     public void mettreAJourCitoyen(String role, int changementQuantite) {
-        citoyens.updateOne(new Document("role", role), new Document("$inc", new Document("quantite", changementQuantite)));
+        citoyens.updateOne(new Document("role", role), new Document("$set", new Document("quantite", changementQuantite)));
         System.out.println("Quantité mise à jour pour le rôle : " + role);
     }
 
@@ -102,8 +103,38 @@ public class GestionCitoyens {
      * @param nom nom du type de citoyen
      */
     // DELETE du CRUD
-    public void supprimerCitoyen(String nom) {
-        citoyens.deleteOne(new Document("nom", nom));
+    public void supprimerCitoyen(String nom, String role) {
+        citoyens.deleteOne(new Document("nom", nom).append("role", role));
         System.out.println("Citoyen supprimé : " + nom);
+    }
+
+    /**
+     * Vérifier si le nombre de citoyens d'un type est suffisant par rapport au besoin.
+     * @param role rôle du citoyen
+     * @param nbNecessaire nombre de citoyens nécessaires
+     * @return boolean, true si nombre suffisant, sinon false
+     */
+    public boolean verifierCitoyens(String role, int nbNecessaire) {
+        Document citoyen = citoyens.find(new Document("role", role))
+                .sort(Sorts.descending("_id"))
+                .first();
+
+        if (citoyen != null) {
+            int nbDisponible = citoyen.getInteger("quantite", 0);
+            System.out.println("Nombre de " + role + " disponible : " + nbDisponible);
+            System.out.println("Nombre de " + role + " nécessaire : " + nbNecessaire);
+            return nbDisponible >= nbNecessaire;
+        }
+        return false;
+    }
+
+    /**
+     * Retourne le citoyen du nom et rôle demandé
+     * @param nom nom du citoyen
+     * @param role rôle
+     * @return Document ressource
+     */
+    public Document getCitoyen(String nom, String role) {
+        return citoyens.find(new Document("nom", nom).append("role", role)).first();
     }
 }
